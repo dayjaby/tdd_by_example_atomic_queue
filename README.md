@@ -1,3 +1,23 @@
+# TDD by example: Re-implementing cpr based on its tests
+
+This is the cpr project stripped to a minimum that it still compiles.
+
+## How to run:
+
+```bash
+mkdir build
+cd build
+cmake -DATOMIC_QUEUE_BUILD_TESTS=ON ..
+make -j4
+make test
+```
+
+## Lesson 1
+
+This lesson is about getting the stress test with 3 producers and 3 consumers to run correctly, and thus passing the first test.
+If you want to skip this lesson, checkout `lesson1_completed`.
+
+
 [![C++14](https://img.shields.io/badge/dialect-C%2B%2B14-blue)](https://en.cppreference.com/w/cpp/14)
 [![MIT license](https://img.shields.io/github/license/max0x7ba/atomic_queue)](https://github.com/max0x7ba/atomic_queue/blob/master/LICENSE)
 ![Latest release](https://img.shields.io/github/v/tag/max0x7ba/atomic_queue?label=latest%20release)
