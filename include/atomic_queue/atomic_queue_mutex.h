@@ -30,47 +30,24 @@ struct ScopedLockType<std::mutex> {
 
 template<class T, class Mutex, unsigned SIZE, bool MINIMIZE_CONTENTION>
 class AtomicQueueMutexT {
-    static constexpr unsigned size_ = MINIMIZE_CONTENTION ? details::round_up_to_power_of_2(SIZE) : SIZE;
-
-    Mutex mutex_;
-    alignas(CACHE_LINE_SIZE) unsigned head_ = 0;
-    alignas(CACHE_LINE_SIZE) unsigned tail_ = 0;
-    alignas(CACHE_LINE_SIZE) T q_[size_] = {};
-
-    static constexpr int SHUFFLE_BITS = details::GetIndexShuffleBits<MINIMIZE_CONTENTION, size_, CACHE_LINE_SIZE / sizeof(T)>::value;
-
-    using ScopedLock = typename ScopedLockType<Mutex>::type;
-
 public:
     using value_type = T;
 
     template<class U>
     bool try_push(U&& element) noexcept {
-        ScopedLock lock(mutex_);
-        if(ATOMIC_QUEUE_LIKELY(head_ - tail_ < size_)) {
-            q_[details::remap_index<SHUFFLE_BITS>(head_ % size_)] = std::forward<U>(element);
-            ++head_;
-            return true;
-        }
         return false;
     }
 
     bool try_pop(T& element) noexcept {
-        ScopedLock lock(mutex_);
-        if(ATOMIC_QUEUE_LIKELY(head_ != tail_)) {
-            element = std::move(q_[details::remap_index<SHUFFLE_BITS>(tail_ % size_)]);
-            ++tail_;
-            return true;
-        }
         return false;
     }
 
     bool was_empty() const noexcept {
-        return static_cast<int>(head_ - tail_) <= 0;
+        return true;
     }
 
     bool was_full() const noexcept {
-        return static_cast<int>(head_ - tail_) >= static_cast<int>(size_);
+        return false;
     }
 };
 
