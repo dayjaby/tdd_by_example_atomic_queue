@@ -24,8 +24,8 @@ namespace {
 // Check that all push'es are ever pop'ed once with multiple producer and multiple consumers.
 template<class Queue>
 void stress() {
-    constexpr int PRODUCERS = 3;
-    constexpr int CONSUMERS = 3;
+    constexpr int PRODUCERS = 15;
+    constexpr int CONSUMERS = 15;
     constexpr unsigned N = 1000000;
 
     Queue q;
@@ -170,8 +170,8 @@ constexpr unsigned CAPACITY = 1024;
 //     stress<AtomicQueue<unsigned, CAPACITY>>();
 // }
 //
-BOOST_AUTO_TEST_CASE(stress_AtomicQueue2) {
-    stress<RetryDecorator<AtomicQueue2<unsigned, CAPACITY>>>();
+BOOST_AUTO_TEST_CASE(stress_AtomicQueue) {
+    stress<AtomicQueue<unsigned, CAPACITY>>();
 }
 //
 // BOOST_AUTO_TEST_CASE(stress_BlockingAtomicQueue2) {
